@@ -32,6 +32,7 @@ public class CrawlerService {
     List<URI> ukis;
     List<URI> seima;
     List<URI> laisvalaikis;
+    List<URI> zmones;
     List<URI> stilius;
     List<URI> keliones;
     List<URI> kriminalai;
@@ -49,6 +50,7 @@ public class CrawlerService {
         ukis = new ArrayList<>();
         seima = new ArrayList<>();
         laisvalaikis = new ArrayList<>();
+        zmones = new ArrayList<>();
         stilius = new ArrayList<>();
         keliones = new ArrayList<>();
         kriminalai = new ArrayList<>();
@@ -74,6 +76,7 @@ public class CrawlerService {
                 }
             }
         });
+
         categorized.put("lietuvoje",lietuvoje);
         categorized.put("uzsienyje",uzsienyje);
         categorized.put("politika",politika);
@@ -83,6 +86,7 @@ public class CrawlerService {
         categorized.put("ukis",ukis);
         categorized.put("seima",seima);
         categorized.put("laisvalaikis",laisvalaikis);
+        categorized.put("zmones",zmones);
         categorized.put("stilius",stilius);
         categorized.put("keliones",keliones);
         categorized.put("kriminalai",kriminalai);
@@ -96,7 +100,8 @@ public class CrawlerService {
         if(extracted.getPath().contains("lietuvoje") || extracted.getPath().contains("savivald") || extracted.getPath().contains("vilni") ||
                 extracted.getPath().contains("kaun") || extracted.getPath().contains("klaipe") || extracted.getPath().contains("siaul") ||
                 extracted.getPath().contains("palang") || extracted.getPath().contains("druski") || extracted.getPath().contains("rajon") ||
-                extracted.getPath().contains("paneve") || extracted.getPath().contains("uten")) {
+                extracted.getPath().contains("paneve") || extracted.getPath().contains("uten") || extracted.getPath().contains("riboj") ||
+                extracted.getPath().contains("valstyb")) {
             lietuvoje.add(extracted);
         } else if(extracted.getPath().contains("uzsien") || extracted.getPath().contains("pasaul") || extracted.getPath().contains("world")) {
             uzsienyje.add(extracted);
@@ -115,7 +120,8 @@ public class CrawlerService {
         } else if(extracted.getPath().contains("versl") || extracted.getPath().contains("karjer") || extracted.getPath().contains("preky") ||
                 extracted.getPath().contains("pramon") || extracted.getPath().contains("transport") || extracted.getPath().contains("profsaj") ||
                 extracted.getPath().contains("imon") || extracted.getPath().contains("vadov") || extracted.getPath().contains("darbuot") ||
-                extracted.getPath().contains("darb") || extracted.getPath().contains("alga") || extracted.getPath().contains("mokes")) {
+                extracted.getPath().contains("darb") || extracted.getPath().contains("alga") || extracted.getPath().contains("mokes") ||
+                extracted.getPath().contains("pasiskol") || extracted.getPath().contains("skola") || extracted.getPath().contains("biudz")) {
             verslas.add(extracted);
         } else if(extracted.getPath().contains("moksl") || extracted.getPath().contains("technolo") || extracted.getPath().contains("kosmos") ||
                 extracted.getPath().contains("atradi") || extracted.getPath().contains("labora")) {
@@ -123,13 +129,17 @@ public class CrawlerService {
         } else if(extracted.getPath().contains("uki") || extracted.getPath().contains("agro")) {
             ukis.add(extracted);
         } else if(extracted.getPath().contains("vaik") || extracted.getPath().contains("zaisl") || extracted.getPath().contains("tevai") ||
-                extracted.getPath().contains("sveik") || extracted.getPath().contains("maist") || extracted.getPath().contains("skon") ||
-                extracted.getPath().contains("mityb") || extracted.getPath().contains("augint")) {
+                extracted.getPath().contains("sveika") || extracted.getPath().contains("maist") || extracted.getPath().contains("skon") ||
+                extracted.getPath().contains("mityb") || extracted.getPath().contains("augint") || extracted.getPath().contains("gyvenimo-budas")) {
             seima.add(extracted);
         } else if(extracted.getPath().contains("laisvalaik") || extracted.getPath().contains("kultur") || extracted.getPath().contains("televi") ||
                 extracted.getPath().contains("pramog") || extracted.getPath().contains("kinas") || extracted.getPath().contains("teatr") ||
                 extracted.getPath().contains("koncert") || extracted.getPath().contains("rengin") || extracted.getPath().contains("kultur")) {
             laisvalaikis.add(extracted);
+        } else if(extracted.getPath().contains("veidai") || extracted.getPath().contains("zmones") || extracted.getPath().contains("vedejai") ||
+                extracted.getPath().contains("pramogu-pasaulis") || extracted.getPath().contains("aktor") || extracted.getPath().contains("muzik") ||
+                extracted.getPath().contains("atlikej") || extracted.getPath().contains("skyryb") || extracted.getPath().contains("zvaigzd")) {
+            zmones.add(extracted);
         } else if(extracted.getPath().contains("stil") || extracted.getPath().contains("mada") || extracted.getPath().contains("mados") ||
                 extracted.getPath().contains("sukuos") || extracted.getPath().contains("drabuz") || extracted.getPath().contains("avali")) {
             stilius.add(extracted);
@@ -180,7 +190,7 @@ public class CrawlerService {
     public URI normalize(Source original, String extracted) throws URISyntaxException {
         URI uriOriginal = new URI(original.getRaw());
         URI uriExtracted = new URI(extracted);
-        if (sameDomain(uriOriginal, uriExtracted)) {
+        if (sameDomain(original, extracted)) {
             if ((extracted.contains("https://") || extracted.contains("http://")) && extracted.contains("www.") && extracted.contains(original.getDomain())) {
                 // Ideal scenario. It contains everything to be structured in new URI().
             } else if (extracted.contains("www.") && extracted.contains(original.getDomain())) {
@@ -214,10 +224,8 @@ public class CrawlerService {
         return uriExtracted;
     }
 
-    public boolean sameDomain(URI original, URI extracted) {
-        if (extracted.getHost() != null && extracted.getHost().equals(original.getHost())) {
-            return true;
-        } else if (extracted.getHost() == null && extracted.getPath() != null && !extracted.getPath().isEmpty()) {
+    public boolean sameDomain(Source original, String extracted) {
+        if (extracted != null && extracted.contains(original.getDomain())) {
             return true;
         } else {
             return false;

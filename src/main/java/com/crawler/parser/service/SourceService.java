@@ -27,6 +27,7 @@ public class SourceService {
         sources.add( new Source("Panele", "https://www.panele.lt/lt", "https", "www", "" ,"panele.lt/lt", "lt", "") );
         sources.add( new Source("Regionu naujienos", "https://www.regionunaujienos.lt/", "https", "www", "" ,"regionunaujienos.lt", "", "") );
         sources.add( new Source("Etaplius", "https://www.etaplius.lt/", "https", "www", "" ,"etaplius.lt", "", "") );
+        sources.add( new Source("Lietuvos Respublikos Vyriausybe", "https://lrv.lt/lt/naujienos", "https", "www", "" ,"lrv.lt/lt/naujienos", "naujienos", "") );
         sources.add( new Source("Aplinkos ministerija", "https://am.lrv.lt/lt/naujienos", "https", "www", "am" ,"am.lrv.lt/lt/naujienos", "naujienos", "") );
         sources.add( new Source("Energetikos ministerija", "https://enmin.lrv.lt/lt/naujienos", "https", "www", "enmin" ,"enmin.lrv.lt/lt/naujienos", "naujienos", "") );
         sources.add( new Source("Ekonomikos ir inovaciju ministerija", "https://eimin.lrv.lt/lt/naujienos", "https", "www", "eimin" ,"eimin.lrv.lt/lt/naujienos", "naujienos", "") );
@@ -35,6 +36,7 @@ public class SourceService {
         sources.add( new Source("Socialines apsaugos ir darbo ministerija", "https://socmin.lrv.lt/lt/naujienos", "https", "www", "socmin" ,"socmin.lrv.lt/lt/naujienos", "naujienos", "") );
         sources.add( new Source("Susisiekimo ministerija", "https://sumin.lrv.lt/lt/naujienos", "https", "www", "sumin" ,"sumin.lrv.lt/lt/naujienos", "naujienos", "") );
         sources.add( new Source("Sveikatos apsaugos ministerija", "https://sam.lrv.lt/lt/naujienos", "https", "www", "sam" ,"sam.lrv.lt/lt/naujienos", "naujienos", "") );
+        sources.add( new Source("Svietimo, mokslo ir sporto ministerija", "https://www.smm.lt/web/lt/news", "https", "www", "" ,"smm.lt/web/lt/news", "news", "") );
         sources.add( new Source("Teisingumo ministerija", "https://tm.lrv.lt/lt/naujienos", "https", "www", "tm" ,"tm.lrv.lt/lt/naujienos", "naujienos", "") );
         sources.add( new Source("Uzsienio reikalu ministerija", "https://www.urm.lt/default/lt/naujienos", "https", "www", "" ,"urm.lt/default/lt/naujienos", "default/lt/naujienos", "") );
         sources.add( new Source("Vidaus reikalu ministerija", "https://vrm.lrv.lt/lt/naujienos", "https", "www", "vrm" ,"vrm.lrv.lt/lt/naujienos", "naujienos", "") );
@@ -42,6 +44,8 @@ public class SourceService {
         sources.add( new Source("Policija", "https://policija.lrv.lt/lt/naujienos", "https", "www", "policija" ,"policija.lrv.lt/lt/naujienos", "naujienos", "") );
         return sources;
     }
+
+
 
     public List<Category> getCategories() {
         List<Category> categories = new ArrayList<>();
