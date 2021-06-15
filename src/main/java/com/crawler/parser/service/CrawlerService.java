@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -137,11 +134,14 @@ public class CrawlerService {
     }
 
     public boolean isSportas(URI extracted) {
-        if(extracted.getPath().contains("sport") || extracted.getPath().contains("cempion") || extracted.getPath().contains("varzyb") ||
-                extracted.getPath().contains("taure") || extracted.getPath().contains("trener") || extracted.getPath().contains("varzov") ||
-                extracted.getPath().contains("komand") || extracted.getPath().contains("rinktine") || extracted.getPath().contains("krepsin") ||
-                extracted.getPath().contains("futbol") || extracted.getPath().contains("tenis") || extracted.getPath().contains("nba") ||
-                extracted.getPath().contains("fiba") || extracted.getPath().contains("fifa") || extracted.getPath().contains("eurolyg")) {
+        String[] keywords = sourceService.getSportasKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -149,10 +149,14 @@ public class CrawlerService {
     }
 
     public boolean isKriminalai(URI extracted) {
-        if(extracted.getPath().contains("kriminal") || extracted.getPath().contains("narko") || extracted.getPath().contains("mafi") ||
-                extracted.getPath().contains("zmogzu") || extracted.getPath().contains("kalej") || extracted.getPath().contains("nelaim") ||
-                extracted.getPath().contains("avarij") || extracted.getPath().contains("gink") || extracted.getPath().contains("gaistr") ||
-                extracted.getPath().contains("sprog")) {
+        String[] keywords = sourceService.getKriminalaiKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -160,7 +164,14 @@ public class CrawlerService {
     }
 
     public boolean isKeliones(URI extracted) {
-        if(extracted.getPath().contains("kelion") || extracted.getPath().contains("atosto") || extracted.getPath().contains("ispud")) {
+        String[] keywords = sourceService.getKelionesKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -168,8 +179,14 @@ public class CrawlerService {
     }
 
     public boolean isStilius(URI extracted) {
-        if(extracted.getPath().contains("stil") || extracted.getPath().contains("mada") || extracted.getPath().contains("mados") ||
-                extracted.getPath().contains("sukuos") || extracted.getPath().contains("drabuz") || extracted.getPath().contains("avali")) {
+        String[] keywords = sourceService.getStiliusKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -177,9 +194,14 @@ public class CrawlerService {
     }
 
     public boolean isZmones(URI extracted) {
-        if(extracted.getPath().contains("veidai") || extracted.getPath().contains("zmones") || extracted.getPath().contains("vedejai") ||
-                extracted.getPath().contains("pramogu-pasaulis") || extracted.getPath().contains("aktor") || extracted.getPath().contains("muzik") ||
-                extracted.getPath().contains("atlikej") || extracted.getPath().contains("skyryb") || extracted.getPath().contains("zvaigzd")) {
+        String[] keywords = sourceService.getZmonesKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -187,9 +209,14 @@ public class CrawlerService {
     }
 
     public boolean isLaisvalaikis(URI extracted) {
-        if(extracted.getPath().contains("laisvalaik") || extracted.getPath().contains("kultur") || extracted.getPath().contains("televi") ||
-                extracted.getPath().contains("pramog") || extracted.getPath().contains("kinas") || extracted.getPath().contains("teatr") ||
-                extracted.getPath().contains("koncert") || extracted.getPath().contains("rengin") || extracted.getPath().contains("kultur")) {
+        String[] keywords = sourceService.getLaisvalaikisKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -197,9 +224,14 @@ public class CrawlerService {
     }
 
     public boolean isSeima(URI extracted) {
-        if(extracted.getPath().contains("vaik") || extracted.getPath().contains("zaisl") || extracted.getPath().contains("tevai") ||
-                extracted.getPath().contains("sveika") || extracted.getPath().contains("maist") || extracted.getPath().contains("skon") ||
-                extracted.getPath().contains("mityb") || extracted.getPath().contains("augint") || extracted.getPath().contains("gyvenimo-budas")) {
+        String[] keywords = sourceService.getSeimaKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -207,7 +239,14 @@ public class CrawlerService {
     }
 
     public boolean isUkis(URI extracted) {
-        if(extracted.getPath().contains("uki") || extracted.getPath().contains("agro")) {
+        String[] keywords = sourceService.getUkisKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -215,8 +254,14 @@ public class CrawlerService {
     }
 
     public boolean isMokslas(URI extracted) {
-        if(extracted.getPath().contains("moksl") || extracted.getPath().contains("technolo") || extracted.getPath().contains("kosmos") ||
-                extracted.getPath().contains("atradi") || extracted.getPath().contains("labora")) {
+        String[] keywords = sourceService.getMokslasKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -224,11 +269,14 @@ public class CrawlerService {
     }
 
     public boolean isVerslas(URI extracted) {
-        if(extracted.getPath().contains("versl") || extracted.getPath().contains("karjer") || extracted.getPath().contains("preky") ||
-                extracted.getPath().contains("pramon") || extracted.getPath().contains("transport") || extracted.getPath().contains("profsaj") ||
-                extracted.getPath().contains("imon") || extracted.getPath().contains("vadov") || extracted.getPath().contains("darbuot") ||
-                extracted.getPath().contains("darb") || extracted.getPath().contains("alga") || extracted.getPath().contains("mokes") ||
-                extracted.getPath().contains("pasiskol") || extracted.getPath().contains("skola") || extracted.getPath().contains("biudz")) {
+        String[] keywords = sourceService.getVerslasKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -236,11 +284,14 @@ public class CrawlerService {
     }
 
     public boolean isFinansai(URI extracted) {
-        if(extracted.getPath().contains("finans") || extracted.getPath().contains("ekonom") || extracted.getPath().contains("pinig") ||
-                extracted.getPath().contains("rinka") || extracted.getPath().contains("rinkos") || extracted.getPath().contains("investi") ||
-                extracted.getPath().contains("infliac") || extracted.getPath().contains("deflia") || extracted.getPath().contains("turtas") ||
-                extracted.getPath().contains("auks") || extracted.getPath().contains("sidabr") || extracted.getPath().contains("naft") ||
-                extracted.getPath().contains("euras") || extracted.getPath().contains("doler") || extracted.getPath().contains("kursas")) {
+        String[] keywords = sourceService.getFinansaiKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -248,11 +299,14 @@ public class CrawlerService {
     }
 
     public boolean isPolitika(URI extracted) {
-        if(extracted.getPath().contains("politik") || extracted.getPath().contains("koru") || extracted.getPath().contains("savivald") ||
-                extracted.getPath().contains("meras") || extracted.getPath().contains("prezi") || extracted.getPath().contains("minist") ||
-                extracted.getPath().contains("seimas") || extracted.getPath().contains("rinkejai") || extracted.getPath().contains("rinkimai") ||
-                extracted.getPath().contains("referendum") || extracted.getPath().contains("respub") || extracted.getPath().contains("konflik") ||
-                extracted.getPath().contains("karas") || extracted.getPath().contains("pabegeliai") || extracted.getPath().contains("parlamen")) {
+        String[] keywords = sourceService.getPolitikaKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -260,7 +314,14 @@ public class CrawlerService {
     }
 
     public boolean isUzsienyje(URI extracted) {
-        if(extracted.getPath().contains("uzsien") || extracted.getPath().contains("pasaul") || extracted.getPath().contains("world")) {
+        String[] keywords = sourceService.getUzsienyjeKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if(extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if(matches > 1) {
             return true;
         } else {
             return false;
@@ -268,11 +329,14 @@ public class CrawlerService {
     }
 
     public boolean isLietuvoje(URI extracted) {
-        if(extracted.getPath().contains("lietuvoje") || extracted.getPath().contains("savivald") || extracted.getPath().contains("vilni") ||
-                extracted.getPath().contains("kaun") || extracted.getPath().contains("klaipe") || extracted.getPath().contains("siaul") ||
-                extracted.getPath().contains("palang") || extracted.getPath().contains("druski") || extracted.getPath().contains("rajon") ||
-                extracted.getPath().contains("paneve") || extracted.getPath().contains("uten") || extracted.getPath().contains("riboj") ||
-                extracted.getPath().contains("valstyb")) {
+        String[] keywords = sourceService.getLietuvojeKeywords();
+        int matches = 0;
+        for (String word : keywords) {
+            if (extracted.getPath().contains(word)) {
+                matches++;
+            }
+        }
+        if (matches > 1) {
             return true;
         } else {
             return false;

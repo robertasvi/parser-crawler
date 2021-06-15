@@ -5,6 +5,8 @@ import com.crawler.parser.dto.Source;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -45,7 +47,87 @@ public class SourceService {
         return sources;
     }
 
+    public String[] getSportasKeywords() {
+        String[] keywords = new String[]{"sport", "cempio", "varzyb", "taure", "trener", "varzov",
+                "komand", "rinktine", "krepsin", "futbol", "tenis", "nba", "fiba", "fifa", "eurolyg",
+                "zaid", "rezult", "skand"};
+        return keywords;
+    }
 
+    public String[] getKriminalaiKeywords() {
+        String[] keywords = new String[]{"kriminal", "narko", "mafi", "zmogzu", "kalej", "nelaim",
+                "avarij", "gink", "gaistr", "sprog", "trag", "seksual", "itar", "teis"};
+        return keywords;
+    }
+
+    public String[] getKelionesKeywords() {
+        String[] keywords = new String[]{"kelion", "atosto", "ispud"};
+        return keywords;
+    }
+
+    public String[] getStiliusKeywords() {
+        String[] keywords = new String[]{"stil", "mada", "mados", "sukuos", "drabuz", "avali"};
+        return keywords;
+    }
+
+    public String[] getZmonesKeywords() {
+        String[] keywords = new String[]{"veidai", "zmones", "vedejai", "pramogu-pasaulis", "aktor",
+                "muzik", "atlikej", "skyryb", "zvaigzd"};
+        return keywords;
+    }
+
+    public String[] getLaisvalaikisKeywords() {
+        String[] keywords = new String[]{"laisvalaik", "kultur", "televi", "pramog", "kinas", "teatr",
+                "koncert", "rengin", "kultur"};
+        return keywords;
+    }
+
+    public String[] getSeimaKeywords() {
+        String[] keywords = new String[]{"vaik", "zaisl", "teva", "sveika", "maist", "skon", "mityb",
+                "augint", "gyvenimo-budas", "mam", "tet", "terap", "mazam"};
+        return keywords;
+    }
+
+    public String[] getUkisKeywords() {
+        String[] keywords = new String[]{"uki","agro"};
+        return keywords;
+    }
+
+    public String[] getMokslasKeywords() {
+        String[] keywords = new String[]{"moksl", "technolo", "kosmos", "atradi", "labora", "inter", "progra",
+                "bitcoin", "kripto"};
+        return keywords;
+    }
+
+    public String[] getVerslasKeywords() {
+        String[] keywords = new String[]{"versl", "karjer", "preky", "pramon", "transport", "profsaj", "imon",
+                "vadov", "darbuot", "darb", "alga", "mokes", "pasiskol", "skola", "biudz", "energ"};
+        return keywords;
+    }
+
+    public String[] getFinansaiKeywords() {
+        String[] keywords = new String[]{"finans", "ekonom", "pinig", "rinka", "rinkos", "investi", "infliac",
+                "deflia", "turtas", "auks", "sidabr", "naft", "euras", "doler", "kursas", "valiut"};
+        return keywords;
+    }
+
+    public String[] getPolitikaKeywords() {
+        String[] keywords = new String[]{"politik", "koru", "savivald", "meras", "prezi", "minist", "seimas",
+                "rinkejai", "rinkimai", "referendum", "respub", "konflik", "karas", "pabegeliai", "parlamen",
+                "prote", "itar", "polito", "valdan"};
+        return keywords;
+    }
+
+    public String[] getUzsienyjeKeywords() {
+        String[] keywords = new String[]{"uzsien", "pasaul", "world"};
+        return keywords;
+    }
+
+    public String[] getLietuvojeKeywords() {
+        String[] keywords = new String[]{"lietuvoje", "savivald", "vilni", "kaun", "klaipe", "siaul", "palang",
+                "druski", "rajon", "paneve", "uten", "riboj", "valstyb"};
+        return keywords;
+    }
 
     public List<Category> getCategories() {
         List<Category> categories = new ArrayList<>();
