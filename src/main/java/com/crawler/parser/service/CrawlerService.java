@@ -41,22 +41,7 @@ public class CrawlerService {
     Map<String, List<URI>> categorized;
 
     public Map run() {
-        lietuvoje = new ArrayList<>();
-        uzsienyje = new ArrayList<>();
-        politika = new ArrayList<>();
-        finansai = new ArrayList<>();
-        verslas = new ArrayList<>();
-        mokslas = new ArrayList<>();
-        ukis = new ArrayList<>();
-        seima = new ArrayList<>();
-        laisvalaikis = new ArrayList<>();
-        zmones = new ArrayList<>();
-        stilius = new ArrayList<>();
-        keliones = new ArrayList<>();
-        kriminalai = new ArrayList<>();
-        sportas = new ArrayList<>();
-        kiti = new ArrayList<>();
-        categorized = new HashMap<>();
+        initiateLists();
         sourceService.getSources().forEach(source -> {
             List<String> extractions = new ArrayList<>();
             Document page = parse(source.getRaw());
@@ -76,7 +61,30 @@ public class CrawlerService {
                 }
             }
         });
+        aggregateCategoriesMap();
+        return categorized;
+    }
 
+    public void initiateLists() {
+        lietuvoje = new ArrayList<>();
+        uzsienyje = new ArrayList<>();
+        politika = new ArrayList<>();
+        finansai = new ArrayList<>();
+        verslas = new ArrayList<>();
+        mokslas = new ArrayList<>();
+        ukis = new ArrayList<>();
+        seima = new ArrayList<>();
+        laisvalaikis = new ArrayList<>();
+        zmones = new ArrayList<>();
+        stilius = new ArrayList<>();
+        keliones = new ArrayList<>();
+        kriminalai = new ArrayList<>();
+        sportas = new ArrayList<>();
+        kiti = new ArrayList<>();
+        categorized = new HashMap<>();
+    }
+
+    public void aggregateCategoriesMap() {
         categorized.put("lietuvoje",lietuvoje);
         categorized.put("uzsienyje",uzsienyje);
         categorized.put("politika",politika);
@@ -92,72 +100,182 @@ public class CrawlerService {
         categorized.put("kriminalai",kriminalai);
         categorized.put("sportas",sportas);
         categorized.put("kiti",kiti);
-        return categorized;
     }
 
     public void categorize(URI extracted) {
-        System.out.println(extracted.toString());
+        if(isLietuvoje(extracted)) {
+            lietuvoje.add(extracted);
+        } else if(isUzsienyje(extracted)) {
+            uzsienyje.add(extracted);
+        } else if(isPolitika(extracted)) {
+            politika.add(extracted);
+        } else if(isFinansai(extracted)) {
+            finansai.add(extracted);
+        } else if(isVerslas(extracted)) {
+            verslas.add(extracted);
+        } else if(isMokslas(extracted)) {
+            mokslas.add(extracted);
+        } else if(isUkis(extracted)) {
+            ukis.add(extracted);
+        } else if(isSeima(extracted)) {
+            seima.add(extracted);
+        } else if(isLaisvalaikis(extracted)) {
+            laisvalaikis.add(extracted);
+        } else if(isZmones(extracted)) {
+            zmones.add(extracted);
+        } else if(isStilius(extracted)) {
+            stilius.add(extracted);
+        } else if(isKeliones(extracted)) {
+            keliones.add(extracted);
+        } else if(isKriminalai(extracted)) {
+            kriminalai.add(extracted);
+        } else if(isSportas(extracted)) {
+            sportas.add(extracted);
+        } else {
+            kiti.add(extracted);
+        }
+    }
+
+    public boolean isSportas(URI extracted) {
+        if(extracted.getPath().contains("sport") || extracted.getPath().contains("cempion") || extracted.getPath().contains("varzyb") ||
+                extracted.getPath().contains("taure") || extracted.getPath().contains("trener") || extracted.getPath().contains("varzov") ||
+                extracted.getPath().contains("komand") || extracted.getPath().contains("rinktine") || extracted.getPath().contains("krepsin") ||
+                extracted.getPath().contains("futbol") || extracted.getPath().contains("tenis") || extracted.getPath().contains("nba") ||
+                extracted.getPath().contains("fiba") || extracted.getPath().contains("fifa") || extracted.getPath().contains("eurolyg")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isKriminalai(URI extracted) {
+        if(extracted.getPath().contains("kriminal") || extracted.getPath().contains("narko") || extracted.getPath().contains("mafi") ||
+                extracted.getPath().contains("zmogzu") || extracted.getPath().contains("kalej") || extracted.getPath().contains("nelaim") ||
+                extracted.getPath().contains("avarij") || extracted.getPath().contains("gink") || extracted.getPath().contains("gaistr") ||
+                extracted.getPath().contains("sprog")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isKeliones(URI extracted) {
+        if(extracted.getPath().contains("kelion") || extracted.getPath().contains("atosto") || extracted.getPath().contains("ispud")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isStilius(URI extracted) {
+        if(extracted.getPath().contains("stil") || extracted.getPath().contains("mada") || extracted.getPath().contains("mados") ||
+                extracted.getPath().contains("sukuos") || extracted.getPath().contains("drabuz") || extracted.getPath().contains("avali")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isZmones(URI extracted) {
+        if(extracted.getPath().contains("veidai") || extracted.getPath().contains("zmones") || extracted.getPath().contains("vedejai") ||
+                extracted.getPath().contains("pramogu-pasaulis") || extracted.getPath().contains("aktor") || extracted.getPath().contains("muzik") ||
+                extracted.getPath().contains("atlikej") || extracted.getPath().contains("skyryb") || extracted.getPath().contains("zvaigzd")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isLaisvalaikis(URI extracted) {
+        if(extracted.getPath().contains("laisvalaik") || extracted.getPath().contains("kultur") || extracted.getPath().contains("televi") ||
+                extracted.getPath().contains("pramog") || extracted.getPath().contains("kinas") || extracted.getPath().contains("teatr") ||
+                extracted.getPath().contains("koncert") || extracted.getPath().contains("rengin") || extracted.getPath().contains("kultur")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isSeima(URI extracted) {
+        if(extracted.getPath().contains("vaik") || extracted.getPath().contains("zaisl") || extracted.getPath().contains("tevai") ||
+                extracted.getPath().contains("sveika") || extracted.getPath().contains("maist") || extracted.getPath().contains("skon") ||
+                extracted.getPath().contains("mityb") || extracted.getPath().contains("augint") || extracted.getPath().contains("gyvenimo-budas")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isUkis(URI extracted) {
+        if(extracted.getPath().contains("uki") || extracted.getPath().contains("agro")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isMokslas(URI extracted) {
+        if(extracted.getPath().contains("moksl") || extracted.getPath().contains("technolo") || extracted.getPath().contains("kosmos") ||
+                extracted.getPath().contains("atradi") || extracted.getPath().contains("labora")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isVerslas(URI extracted) {
+        if(extracted.getPath().contains("versl") || extracted.getPath().contains("karjer") || extracted.getPath().contains("preky") ||
+                extracted.getPath().contains("pramon") || extracted.getPath().contains("transport") || extracted.getPath().contains("profsaj") ||
+                extracted.getPath().contains("imon") || extracted.getPath().contains("vadov") || extracted.getPath().contains("darbuot") ||
+                extracted.getPath().contains("darb") || extracted.getPath().contains("alga") || extracted.getPath().contains("mokes") ||
+                extracted.getPath().contains("pasiskol") || extracted.getPath().contains("skola") || extracted.getPath().contains("biudz")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isFinansai(URI extracted) {
+        if(extracted.getPath().contains("finans") || extracted.getPath().contains("ekonom") || extracted.getPath().contains("pinig") ||
+                extracted.getPath().contains("rinka") || extracted.getPath().contains("rinkos") || extracted.getPath().contains("investi") ||
+                extracted.getPath().contains("infliac") || extracted.getPath().contains("deflia") || extracted.getPath().contains("turtas") ||
+                extracted.getPath().contains("auks") || extracted.getPath().contains("sidabr") || extracted.getPath().contains("naft") ||
+                extracted.getPath().contains("euras") || extracted.getPath().contains("doler") || extracted.getPath().contains("kursas")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isPolitika(URI extracted) {
+        if(extracted.getPath().contains("politik") || extracted.getPath().contains("koru") || extracted.getPath().contains("savivald") ||
+                extracted.getPath().contains("meras") || extracted.getPath().contains("prezi") || extracted.getPath().contains("minist") ||
+                extracted.getPath().contains("seimas") || extracted.getPath().contains("rinkejai") || extracted.getPath().contains("rinkimai") ||
+                extracted.getPath().contains("referendum") || extracted.getPath().contains("respub") || extracted.getPath().contains("konflik") ||
+                extracted.getPath().contains("karas") || extracted.getPath().contains("pabegeliai") || extracted.getPath().contains("parlamen")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isUzsienyje(URI extracted) {
+        if(extracted.getPath().contains("uzsien") || extracted.getPath().contains("pasaul") || extracted.getPath().contains("world")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isLietuvoje(URI extracted) {
         if(extracted.getPath().contains("lietuvoje") || extracted.getPath().contains("savivald") || extracted.getPath().contains("vilni") ||
                 extracted.getPath().contains("kaun") || extracted.getPath().contains("klaipe") || extracted.getPath().contains("siaul") ||
                 extracted.getPath().contains("palang") || extracted.getPath().contains("druski") || extracted.getPath().contains("rajon") ||
                 extracted.getPath().contains("paneve") || extracted.getPath().contains("uten") || extracted.getPath().contains("riboj") ||
                 extracted.getPath().contains("valstyb")) {
-            lietuvoje.add(extracted);
-        } else if(extracted.getPath().contains("uzsien") || extracted.getPath().contains("pasaul") || extracted.getPath().contains("world")) {
-            uzsienyje.add(extracted);
-        } else if(extracted.getPath().contains("politik") || extracted.getPath().contains("koru") || extracted.getPath().contains("savivald") ||
-                extracted.getPath().contains("meras") || extracted.getPath().contains("prezi") || extracted.getPath().contains("minist") ||
-                extracted.getPath().contains("seimas") || extracted.getPath().contains("rinkejai") || extracted.getPath().contains("rinkimai") ||
-                extracted.getPath().contains("referendum") || extracted.getPath().contains("respub") || extracted.getPath().contains("konflik") ||
-                extracted.getPath().contains("karas") || extracted.getPath().contains("pabegeliai") || extracted.getPath().contains("parlamen")) {
-            politika.add(extracted);
-        } else if(extracted.getPath().contains("finans") || extracted.getPath().contains("ekonom") || extracted.getPath().contains("pinig") ||
-                extracted.getPath().contains("rinka") || extracted.getPath().contains("rinkos") || extracted.getPath().contains("investi") ||
-                extracted.getPath().contains("infliac") || extracted.getPath().contains("deflia") || extracted.getPath().contains("turtas") ||
-                extracted.getPath().contains("auks") || extracted.getPath().contains("sidabr") || extracted.getPath().contains("naft") ||
-                extracted.getPath().contains("euras") || extracted.getPath().contains("doler") || extracted.getPath().contains("kursas")) {
-            finansai.add(extracted);
-        } else if(extracted.getPath().contains("versl") || extracted.getPath().contains("karjer") || extracted.getPath().contains("preky") ||
-                extracted.getPath().contains("pramon") || extracted.getPath().contains("transport") || extracted.getPath().contains("profsaj") ||
-                extracted.getPath().contains("imon") || extracted.getPath().contains("vadov") || extracted.getPath().contains("darbuot") ||
-                extracted.getPath().contains("darb") || extracted.getPath().contains("alga") || extracted.getPath().contains("mokes") ||
-                extracted.getPath().contains("pasiskol") || extracted.getPath().contains("skola") || extracted.getPath().contains("biudz")) {
-            verslas.add(extracted);
-        } else if(extracted.getPath().contains("moksl") || extracted.getPath().contains("technolo") || extracted.getPath().contains("kosmos") ||
-                extracted.getPath().contains("atradi") || extracted.getPath().contains("labora")) {
-            mokslas.add(extracted);
-        } else if(extracted.getPath().contains("uki") || extracted.getPath().contains("agro")) {
-            ukis.add(extracted);
-        } else if(extracted.getPath().contains("vaik") || extracted.getPath().contains("zaisl") || extracted.getPath().contains("tevai") ||
-                extracted.getPath().contains("sveika") || extracted.getPath().contains("maist") || extracted.getPath().contains("skon") ||
-                extracted.getPath().contains("mityb") || extracted.getPath().contains("augint") || extracted.getPath().contains("gyvenimo-budas")) {
-            seima.add(extracted);
-        } else if(extracted.getPath().contains("laisvalaik") || extracted.getPath().contains("kultur") || extracted.getPath().contains("televi") ||
-                extracted.getPath().contains("pramog") || extracted.getPath().contains("kinas") || extracted.getPath().contains("teatr") ||
-                extracted.getPath().contains("koncert") || extracted.getPath().contains("rengin") || extracted.getPath().contains("kultur")) {
-            laisvalaikis.add(extracted);
-        } else if(extracted.getPath().contains("veidai") || extracted.getPath().contains("zmones") || extracted.getPath().contains("vedejai") ||
-                extracted.getPath().contains("pramogu-pasaulis") || extracted.getPath().contains("aktor") || extracted.getPath().contains("muzik") ||
-                extracted.getPath().contains("atlikej") || extracted.getPath().contains("skyryb") || extracted.getPath().contains("zvaigzd")) {
-            zmones.add(extracted);
-        } else if(extracted.getPath().contains("stil") || extracted.getPath().contains("mada") || extracted.getPath().contains("mados") ||
-                extracted.getPath().contains("sukuos") || extracted.getPath().contains("drabuz") || extracted.getPath().contains("avali")) {
-            stilius.add(extracted);
-        } else if(extracted.getPath().contains("kelion") || extracted.getPath().contains("atosto") || extracted.getPath().contains("ispud")) {
-            keliones.add(extracted);
-        } else if(extracted.getPath().contains("kriminal") || extracted.getPath().contains("narko") || extracted.getPath().contains("mafi") ||
-                extracted.getPath().contains("zmogzu") || extracted.getPath().contains("kalej") || extracted.getPath().contains("nelaim") ||
-                extracted.getPath().contains("avarij") || extracted.getPath().contains("gink") || extracted.getPath().contains("gaistr") ||
-                extracted.getPath().contains("sprog")) {
-            kriminalai.add(extracted);
-        } else if(extracted.getPath().contains("sport") || extracted.getPath().contains("cempion") || extracted.getPath().contains("varzyb") ||
-                extracted.getPath().contains("taure") || extracted.getPath().contains("trener") || extracted.getPath().contains("varzov") ||
-                extracted.getPath().contains("komand") || extracted.getPath().contains("rinktine") || extracted.getPath().contains("krepsin") ||
-                extracted.getPath().contains("futbol") || extracted.getPath().contains("tenis") || extracted.getPath().contains("nba") ||
-                extracted.getPath().contains("fiba") || extracted.getPath().contains("fifa") || extracted.getPath().contains("eurolyg")) {
-            sportas.add(extracted);
+            return true;
         } else {
-            kiti.add(extracted);
+            return false;
         }
     }
 
