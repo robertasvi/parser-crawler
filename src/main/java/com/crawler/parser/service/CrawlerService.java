@@ -137,7 +137,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getSportasKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -152,7 +152,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getKriminalaiKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -167,7 +167,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getKelionesKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -182,7 +182,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getStiliusKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -197,7 +197,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getZmonesKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -212,7 +212,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getLaisvalaikisKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -227,7 +227,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getSeimaKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -242,7 +242,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getUkisKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -257,7 +257,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getMokslasKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -272,7 +272,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getVerslasKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -287,7 +287,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getFinansaiKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -302,7 +302,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getPolitikaKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -317,7 +317,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getUzsienyjeKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if(extracted.getPath().contains(word)) {
+            if(extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -332,7 +332,7 @@ public class CrawlerService {
         String[] keywords = sourceService.getLietuvojeKeywords();
         int matches = 0;
         for (String word : keywords) {
-            if (extracted.getPath().contains(word)) {
+            if (extracted.toString().contains(word)) {
                 matches++;
             }
         }
@@ -408,6 +408,8 @@ public class CrawlerService {
 
     public boolean sameDomain(Source original, String extracted) {
         if (extracted != null && extracted.contains(original.getDomain())) {
+            return true;
+        } else if(!extracted.contains("http") && !extracted.contains("www.") && !extracted.contains(original.getDomain())) {
             return true;
         } else {
             return false;
