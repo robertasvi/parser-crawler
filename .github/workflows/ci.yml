@@ -27,5 +27,6 @@ jobs:
     - name: Build with Maven 
       run: |
         mvn -B package --file pom.xml
-        mvn help:evaluate -Dexpression=project.version -q -DforceStdout
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q)
+        echo $VERSION
 
