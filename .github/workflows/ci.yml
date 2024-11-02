@@ -41,7 +41,7 @@ jobs:
         git add -A
         git commit -a -m "Version increment $RELEASE"
         git push origin master
-        git tag ${VERSION}
+        git tag ${RELEASE}
         git push --follow-tags
         git push --tags
 
@@ -60,7 +60,7 @@ jobs:
         git add -A
         git commit -a -m "Version increment $RELEASE"
         git push origin master
-        git tag ${VERSION}
+        git tag ${RELEASE}
         git push --follow-tags
         git push --tags
 
@@ -79,7 +79,7 @@ jobs:
         git add -A
         git commit -a -m "Version increment $RELEASE"
         git push origin master
-        git tag ${VERSION}
+        git tag ${RELEASE}
         git push --follow-tags
         git push --tags
 
