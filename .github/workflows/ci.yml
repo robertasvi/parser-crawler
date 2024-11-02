@@ -34,14 +34,11 @@ jobs:
         patch=$(echo $VERSION | cut -d. -f3)
         patch=$((patch+1))
         RELEASE=$(echo "$major.$minor.$patch")
-
-    - name: Update version
-      run: |
         mvn versions:set -DnewVersion=$RELEASE
         git config user.email "robertasvi@users.noreply.github.com"
         git config user.name "robertasvi"
         git add -A
-        git commit -a -m "Version increment $RELEASE"
+        git commit -a -m "Version increment $(echo $RELEASE)"
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
