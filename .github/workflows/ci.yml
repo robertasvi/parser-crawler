@@ -32,6 +32,6 @@ jobs:
         major=$(echo $VERSION | cut -d. -f1)
         minor=$(echo $VERSION | cut -d. -f2)
         patch=$(echo $VERSION | cut -d. -f3)
-        minor=$((minor+1))
+        patch=$((patch+1))
         echo "$major.$minor.$patch"
 
