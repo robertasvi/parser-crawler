@@ -34,27 +34,27 @@ jobs:
 
     - name: Semantic version
       run: |
-        ${{env.VERSION}}=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
         echo ${{env.VERSION}}
-        ${{env.major}}=$(echo ${{env.VERSION}} | cut -d. -f1)
-        ${{env.minor}}=$(echo ${{env.VERSION}} | cut -d. -f2)
-        ${{env.patch}}=$(echo ${{env.VERSION}}| cut -d. -f3)
+        major=$(echo ${{env.VERSION}} | cut -d. -f1) >> $GITHUB_ENV
+        minor=$(echo ${{env.VERSION}} | cut -d. -f2) >> $GITHUB_ENV
+        patch=$(echo ${{env.VERSION}}| cut -d. -f3) >> $GITHUB_ENV
     - name: Major version
       if: contains(github.event.inputs.auto_version, 'major')
       run: |
-        ${{env.major}}=$((${{env.major}}+1))
+        major=$((${{env.major}}+1)) >> $GITHUB_ENV
     - name: Minor version
       if: contains(github.event.inputs.auto_version, 'minor')
       run: |
-        ${{env.minor}}=$((${{env.minor}}+1))
+        minor=$((${{env.minor}}+1)) >> $GITHUB_ENV
     - name: Patch version
       if: contains(github.event.inputs.auto_version, 'patch')
       run: |
-        ${{env.patch}}=$((${{env.patch}}+1))
+        patch=$((${{env.patch}}+1)) >> $GITHUB_ENV
 
     - name: Release version
       run: |
-        ${{env.RELEASE}}=$(echo "${{env.major}}.${{env.minor}}.${{env.patch}}")
+        RELEASE=$(echo "${{env.major}}.${{env.minor}}.${{env.patch}}") >> $GITHUB_ENV
         mvn versions:set -DnewVersion=${{env.RELEASE}}
         git config user.email "robertasvi@users.noreply.github.com"
         git config user.name "robertasvi"
