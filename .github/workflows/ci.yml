@@ -28,31 +28,31 @@ jobs:
 
     - name: Semantic version
       run: |
-        echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
-        echo "major=$(echo $VERSION | cut -d. -f1)" >> $GITHUB_ENV
-        echo "minor=$(echo $VERSION | cut -d. -f2)" >> $GITHUB_ENV
-        echo "patch=$(echo $VERSION | cut -d. -f3)" >> $GITHUB_ENV
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
+        major=$(echo $VERSION | cut -d. -f1) >> $GITHUB_ENV
+        minor=$(echo $VERSION | cut -d. -f2) >> $GITHUB_ENV
+        patch=$(echo $VERSION | cut -d. -f3) >> $GITHUB_ENV
     - name: Major version
       if: contains(github.event.inputs.auto_version, 'major')
       run: |
-        echo "major=$(($major+1))" >> $GITHUB_ENV
+        major=$(($major+1)) >> $GITHUB_ENV
     - name: Minor version
       if: contains(github.event.inputs.auto_version, 'minor')
       run: |
-        echo "minor=$(($minor+1))" >> $GITHUB_ENV
+        minor=$(($minor+1)) >> $GITHUB_ENV
     - name: Patch version
       if: contains(github.event.inputs.auto_version, 'patch')
       run: |
-        echo "patch=$(($patch+1))" >> $GITHUB_ENV
+        patch=$(($patch+1)) >> $GITHUB_ENV
 
     - name: Release version
       run: |
-        echo "RELEASE=$(echo "$major.$minor.$patch")" >> $GITHUB_ENV
+        RELEASE=$(echo "$major.$minor.$patch") >> $GITHUB_ENV
         mvn versions:set -DnewVersion=$RELEASE
         git config user.email "robertasvi@users.noreply.github.com"
         git config user.name "robertasvi"
         git add -A
-        git commit -a -m "Version increment $RELEASE"
+        git commit -a -m "Version increment echo $RELEASE"
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
