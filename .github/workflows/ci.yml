@@ -26,12 +26,13 @@ jobs:
         cache: maven
     - name: Build with Maven 
       run: |
-        # mvn -B package --file pom.xml
         VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
         echo $VERSION
         major=$(echo $VERSION | cut -d. -f1)
         minor=$(echo $VERSION | cut -d. -f2)
         patch=$(echo $VERSION | cut -d. -f3)
         patch=$((patch+1))
-        echo "$major.$minor.$patch"
+        RELEASE=$(echo "$major.$minor.$patch")
+        mvn versions:set -DnewVersion=$RELEASE
+        mvn -B package --file pom.xml
 
