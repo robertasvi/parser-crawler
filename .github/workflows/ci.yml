@@ -5,7 +5,7 @@ on:
     inputs:
       auto_version:
         required: true
-        default: 'minor'
+        default: 'patch'
         description: Choose auto-versioning type
         type: choice
         options:
@@ -16,6 +16,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      VERSION: 0.0.0
+      major: 0
+      minor: 0
+      patch: 0
+      RELEASE: 0.0.0
+      
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 11
@@ -27,32 +34,32 @@ jobs:
 
     - name: Semantic version
       run: |
-        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-        echo $VERSION
-        major=$(echo $VERSION | cut -d. -f1)
-        minor=$(echo $VERSION | cut -d. -f2)
-        patch=$(echo $VERSION | cut -d. -f3)
+        ${{env.VERSION}}=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        echo ${{env.VERSION}}
+        ${{env.major}}=$(echo ${{env.VERSION}} | cut -d. -f1)
+        ${{env.minor}}=$(echo ${{env.VERSION}} | cut -d. -f2)
+        ${{env.patch}}=$(echo ${{env.VERSION}}| cut -d. -f3)
     - name: Major version
       if: contains(github.event.inputs.auto_version, 'major')
       run: |
-        major=$((major+1))
+        ${{env.major}}=$((${{env.major}}+1))
     - name: Minor version
       if: contains(github.event.inputs.auto_version, 'minor')
       run: |
-        minor=$((minor+1))
+        ${{env.minor}}=$((${{env.minor}}+1))
     - name: Patch version
       if: contains(github.event.inputs.auto_version, 'patch')
       run: |
-        patch=$((patch+1))
+        ${{env.patch}}=$((${{env.patch}}+1))
 
     - name: Release version
       run: |
-        RELEASE=$(echo "$major.$minor.$patch")
-        mvn versions:set -DnewVersion=$RELEASE
+        ${{env.RELEASE}}=$(echo "${{env.major}}.${{env.minor}}.${{env.patch}}")
+        mvn versions:set -DnewVersion=${{env.RELEASE}}
         git config user.email "robertasvi@users.noreply.github.com"
         git config user.name "robertasvi"
         git add -A
-        git commit -a -m "Version increment $(echo $RELEASE)"
+        git commit -a -m "Version increment ${{env.RELEASE}})"
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
