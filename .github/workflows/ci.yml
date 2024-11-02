@@ -29,5 +29,8 @@ jobs:
         # mvn -B package --file pom.xml
         VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
         echo $VERSION
-        
+        major=$(echo $VERSION | cut -d. -f1)
+        minor=$(echo $VERSION | cut -d. -f2)
+        patch=$(echo $VERSION | cut -d. -f3)
+        echo $major $minor $patch
 
