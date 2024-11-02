@@ -26,7 +26,7 @@ jobs:
         cache: maven
     - name: Build with Maven 
       run: |
-        mvn -B package --file pom.xml
-        VERSION=$(mvn help:evaluate -Dexpression=project.version -q)
-        echo $VERSION
+        # mvn -B package --file pom.xml
+        echo "mvn help:evaluate -Dexpression=project.version -q -DforceStdout" >> $VERSION
+        
 
