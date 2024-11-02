@@ -35,18 +35,18 @@ jobs:
         patch=$((patch+1))
         RELEASE=$(echo "$major.$minor.$patch")
 
-      - name: Update version
-        run: |
-          mvn versions:set -DnewVersion=$RELEASE
-          git config user.email "robertasvi@users.noreply.github.com"
-          git config user.name "robertasvi"
-          git add -A
-          git commit -a -m "Version increment $RELEASE"
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ github.token }}
-          branch: ${{ github.ref }}
+    - name: Update version
+      run: |
+        mvn versions:set -DnewVersion=$RELEASE
+        git config user.email "robertasvi@users.noreply.github.com"
+        git config user.name "robertasvi"
+        git add -A
+        git commit -a -m "Version increment $RELEASE"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ github.token }}
+        branch: ${{ github.ref }}
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
