@@ -26,33 +26,51 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Semantic version
-      run: |
-        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
-        major=$(echo $VERSION | cut -d. -f1) >> $GITHUB_ENV
-        minor=$(echo $VERSION | cut -d. -f2) >> $GITHUB_ENV
-        patch=$(echo $VERSION | cut -d. -f3) >> $GITHUB_ENV
     - name: Major version
       if: contains(github.event.inputs.auto_version, 'major')
       run: |
-        major=$(($major+1)) >> $GITHUB_ENV
-    - name: Minor version
-      if: contains(github.event.inputs.auto_version, 'minor')
-      run: |
-        minor=$(($minor+1)) >> $GITHUB_ENV
-    - name: Patch version
-      if: contains(github.event.inputs.auto_version, 'patch')
-      run: |
-        patch=$(($patch+1)) >> $GITHUB_ENV
-
-    - name: Release version
-      run: |
-        RELEASE=$(echo "$major.$minor.$patch") >> $GITHUB_ENV
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        major=$(echo $VERSION | cut -d. -f1)
+        minor=$(echo $VERSION | cut -d. -f2)
+        patch=$(echo $VERSION | cut -d. -f3)
+        major=$(($major+1))
+        RELEASE=$(echo "$major.$minor.$patch")
         mvn versions:set -DnewVersion=$RELEASE
         git config user.email "robertasvi@users.noreply.github.com"
         git config user.name "robertasvi"
         git add -A
-        git commit -a -m "Version increment echo $RELEASE"
+        git commit -a -m "Version increment $RELEASE"
+
+    - name: Minor version
+      if: contains(github.event.inputs.auto_version, 'minor')
+      run: |
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        major=$(echo $VERSION | cut -d. -f1)
+        minor=$(echo $VERSION | cut -d. -f2)
+        patch=$(echo $VERSION | cut -d. -f3)
+        minor=$(($minor+1))
+        RELEASE=$(echo "$major.$minor.$patch")
+        mvn versions:set -DnewVersion=$RELEASE
+        git config user.email "robertasvi@users.noreply.github.com"
+        git config user.name "robertasvi"
+        git add -A
+        git commit -a -m "Version increment $RELEASE"
+
+    - name: Patch version
+      if: contains(github.event.inputs.auto_version, 'patch')
+      run: |
+        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        major=$(echo $VERSION | cut -d. -f1)
+        minor=$(echo $VERSION | cut -d. -f2)
+        patch=$(echo $VERSION | cut -d. -f3)
+        patch=$(($patch+1))
+        RELEASE=$(echo "$major.$minor.$patch")
+        mvn versions:set -DnewVersion=$RELEASE
+        git config user.email "robertasvi@users.noreply.github.com"
+        git config user.name "robertasvi"
+        git add -A
+        git commit -a -m "Version increment $RELEASE"
+
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
