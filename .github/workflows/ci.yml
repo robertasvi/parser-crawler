@@ -27,7 +27,8 @@ on:
 jobs:
   version:
     runs-on: ubuntu-latest
-
+    outputs:
+      release-version: ${{steps.newVersion.outputs.releaseVersion}}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -65,13 +66,15 @@ jobs:
     - name: New version
       id: newVersion
       run: |
-        echo "releaseVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "releaseVersion=$release-version" >> $GITHUB_OUTPUT
         echo "New version $NEW_VERSION"
 
   build:
     needs:
       - version
     runs-on: ubuntu-latest
+    env:
+      NEW_VERSION: ${{needs.newVersion.outputs.release-version}}
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
