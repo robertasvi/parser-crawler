@@ -48,25 +48,25 @@ jobs:
         echo "patch=${patch}" >> $GITHUB_ENV
         echo "Current version $major.$minor.$patch"
 
-    - name: Increment version by major
+    - name: Increment version major number
       if: ${{github.event.inputs.version_type=='major'}}
       run: |
         NEW_VERSION=$(echo "$(($major+1)).$minor.$patch")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
-    - name: Increment version by minor
+    - name: Increment version minor number
       if: ${{github.event.inputs.version_type=='minor'}}
       run: |
         NEW_VERSION=$(echo "$major.$(($minor+1)).$patch")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
-    - name: Increment version by patch
+    - name: Increment version patch number
       if: ${{github.event.inputs.version_type=='patch'}}
       run: |
         NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
-    - name: New version
+    - name: New version $(echo "$NEW_VERSION")
       id: newVersion
       run: echo "releaseVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
 
