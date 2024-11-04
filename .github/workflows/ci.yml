@@ -30,9 +30,12 @@ jobs:
     - name: Current version
       run: |
         CURRENT_VERSION=$(git describe --tags --abbrev=0)
-        echo "major=$(echo $CURRENT_VERSION | cut -d. -f1)" >> GITHUB_ENV
-        echo "minor=$(echo $CURRENT_VERSION | cut -d. -f2)" >> GITHUB_ENV
-        echo "patch=$(echo $CURRENT_VERSION | cut -d. -f3)" >> GITHUB_ENV
+        major=$(echo $CURRENT_VERSION | cut -d. -f1)
+        echo "major=${major}" >> $GITHUB_ENV
+        minor=$(echo $CURRENT_VERSION | cut -d. -f2)
+        echo "minor=${minor}" >> $GITHUB_ENV
+        patch=$(echo $CURRENT_VERSION | cut -d. -f3)
+        echo "patch=${patch}" >> $GITHUB_ENV
         echo "Current version $major.$minor.$patch"
 
     - name: Increment version by major
