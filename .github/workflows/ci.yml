@@ -1,5 +1,10 @@
-name: Build & deploy
-run-name: ${{github.event_name}} - ${{inputs.environment}} - ${{inputs.version_type}} by @${{github.actor}}
+name: Build, test & deploy
+run-name: ${{github.event_name}} ${{github.event.pull_request.base}} - ${{github.event.inputs.environment||'development'}} - ${{github.actor}}
+
+env:
+  target_environment: ${{github.event.inputs.environment||'development'}}
+  branch: ${{github.ref_name}}
+  version_type: ${{github.event.inputs.version_type||'development'}}
 
 on:
   pull_request:
@@ -33,7 +38,7 @@ on:
 
 jobs:
   version:
-    name: "Increment ${{github.event.inputs.version_type}} version"
+    name: "Increment ${{inputs.version_type||'development'}} version"
     runs-on: ubuntu-latest
     outputs:
       NEW_VERSION: ${{steps.newVersion.outputs.releaseVersion}}
@@ -54,25 +59,25 @@ jobs:
         echo "Current version $major.$minor.$patch"
 
     - name: Increment major version
-      if: ${{github.event.inputs.version_type=='major'&&github.ref_name=='master'&&github.event.inputs.environment=='production'}}
+      if: ${{env.version_type=='major'&&github.ref_name=='master'&&env.target_environment=='production'}}
       run: |
         NEW_VERSION=$(echo "$(($major+1)).0.0")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: Increment minor version
-      if: ${{github.event.inputs.version_type=='minor'&&github.ref_name=='master'&&github.event.inputs.environment=='production'}}
+      if: ${{env.version_type=='minor'&&github.ref_name=='master'&&env.target_environment=='production'}}
       run: |
         NEW_VERSION=$(echo "$major.$(($minor+1)).0")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: Increment patch version
-      if: ${{github.event.inputs.version_type=='patch'&&github.ref_name=='master'&&github.event.inputs.environment=='production'}}
+      if: ${{env.version_type=='patch'&&github.ref_name=='master'&&env.target_environment=='production'}}
       run: |
         NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
     
     - name: Increment development version
-      if: ${{github.event_name=='pull_request'||github.event.inputs.version_type=='development'&&(github.event.inputs.environment=='development'||github.event.inputs.environment=='systest')}}
+      if: ${{(github.event_name=='pull_request'||github.event_name=='push'||github.event_name=='workflow_dispatch')||env.version_type=='development'&&(env.target_environment=='development'||env.target_environment=='systest')}}
       run: |
         NEW_VERSION=$(echo "$major.$minor.$patch.$(date +'%Y%m%d-%H%M%S')")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
@@ -101,6 +106,7 @@ jobs:
         run: mvn versions:set -DnewVersion=$NEW_VERSION
 
       - name: Create a new tag ${{needs.version.outputs.NEW_VERSION}}
+        if: ${{env.target_environment=='production'}}
         run: |
           git config user.email "robertasvi@users.noreply.github.com"
           git config user.name "robertasvi"
