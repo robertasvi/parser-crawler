@@ -17,13 +17,14 @@ on:
 
       version_type:
         required: true
-        default: 'patch'
+        default: 'development'
         description: Choose release version
         type: choice
         options:
           - major
           - minor
           - patch
+          - development
 
 jobs:
   version:
@@ -45,24 +46,32 @@ jobs:
         echo "minor=${minor}" >> $GITHUB_ENV
         patch=$(echo $CURRENT_VERSION | cut -d. -f3)
         echo "patch=${patch}" >> $GITHUB_ENV
-        echo "Current version $major.$minor.$patch"
+        development=$(echo $CURRENT_VERSION | cut -d. -f4)
+        echo "development=${development}" >> $GITHUB_ENV
+        echo "Current version $major.$minor.$patch.$development"
 
-    - name: Increment version major number
+    - name: Increment major version
       if: ${{github.event.inputs.version_type=='major'&&github.ref_name=='master'&&github.event.inputs.environment=='production'}}
       run: |
         NEW_VERSION=$(echo "$(($major+1)).0.0")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
-    - name: Increment version minor number
+    - name: Increment minor version
       if: ${{github.event.inputs.version_type=='minor'&&github.ref_name=='master'&&github.event.inputs.environment=='production'}}
       run: |
         NEW_VERSION=$(echo "$major.$(($minor+1)).0")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
-    - name: Increment version patch number
-      if: ${{github.event.inputs.version_type=='patch'}}
+    - name: Increment patch version
+      if: ${{github.event.inputs.version_type=='patch'&&github.ref_name=='master'&&github.event.inputs.environment=='production'}}
       run: |
         NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
+        echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
+    
+    - name: Increment development version
+      if: ${{github.event.inputs.version_type=='development'&&!github.event.inputs.environment=='stage'&&!github.event.inputs.environment=='production'}}
+      run: |
+        NEW_VERSION=$(echo "$major.$minor.$patch.$(date +'%Y%m%d-%H%M%S')")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: New version ${{env.NEW_VERSION}}
