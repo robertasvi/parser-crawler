@@ -26,6 +26,8 @@ on:
 
 jobs:
   version:
+    name: "Increment version by ${{github.event.inputs.release_version}}"
+    if: ${{github.ref_name=='release' && github.event.inputs.environment=='production'}}
     runs-on: ubuntu-latest
     outputs:
       NEW_VERSION: ${{steps.newVersion.outputs.releaseVersion}}
@@ -46,28 +48,26 @@ jobs:
         echo "Current version $major.$minor.$patch"
 
     - name: Increment version by major
-      if: contains(github.event.inputs.release_version, 'major')
+      if: ${{github.event.inputs.release_version=='major'}}
       run: |
         NEW_VERSION=$(echo "$(($major+1)).$minor.$patch")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: Increment version by minor
-      if: contains(github.event.inputs.release_version, 'minor')
+      if: ${{github.event.inputs.release_version=='minor'}}
       run: |
         NEW_VERSION=$(echo "$major.$(($minor+1)).$patch")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: Increment version by patch
-      if: contains(github.event.inputs.release_version, 'patch')
+      if: ${{github.event.inputs.release_version=='patch'}}
       run: |
         NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
-    - name: New version
+    - name: New version $NEW_VERSION
       id: newVersion
-      run: |
-        echo "releaseVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
-        echo "New version $NEW_VERSION"
+      run: echo "releaseVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
 
   build:
     needs:
