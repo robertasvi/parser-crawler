@@ -27,8 +27,7 @@ on:
 jobs:
   version:
     runs-on: ubuntu-latest
-    outputs:
-      release_version: ${{steps.newVersion.outputs.NEW_VERSION}}
+
     steps:
     - uses: actions/checkout@v3
       with:
@@ -66,7 +65,7 @@ jobs:
     - name: New version
       id: newVersion
       run: |
-        echo "::set-output name=NEW_VERSION::$NEW_VERSION"
+        echo "releaseVersion=$NEW_VERSION" >> "$GITHUB_OUTPUT"
         echo "New version $NEW_VERSION"
 
   build:
@@ -83,19 +82,19 @@ jobs:
           cache: maven
 
       - name: Read the build job output
-        run: echo "${{needs.version.outputs.newVersion}}"
+        run: echo "${{steps.newVersion.outputs.releaseVersion}}"
     
       - name: Update version in POM
-        run: mvn versions:set -DnewVersion=${{steps.newVersion.outputs.release_version}}
+        run: mvn versions:set -DnewVersion=${{steps.newVersion.outputs.releaseVersion}}
 
       - name: Create a new tag
         run: |
           git config user.email "robertasvi@users.noreply.github.com"
           git config user.name "robertasvi"
           git add -A
-          git commit -a -m "Version increment ${{steps.newVersion.outputs.release_version}}"
+          git commit -a -m "Version increment ${{steps.newVersion.outputs.releaseVersion}}"
           git push origin master
-          git tag ${{steps.newVersion.outputs.release_version}}
+          git tag ${{steps.newVersion.outputs.releaseVersion}}
           git push --follow-tags
           git push --tags
 
