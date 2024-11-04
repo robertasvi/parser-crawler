@@ -12,6 +12,12 @@ on:
           - major
           - minor
           - patch
+env:
+  CURRENT_VERSION:
+  NEW_VERSION:
+  major:
+  minor:
+  patch:
 
 jobs:
   build:
