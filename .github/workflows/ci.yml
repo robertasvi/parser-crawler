@@ -51,13 +51,13 @@ jobs:
     - name: Increment version major number
       if: ${{github.event.inputs.version_type=='major'}}
       run: |
-        NEW_VERSION=$(echo "$(($major+1)).$minor.$patch")
+        NEW_VERSION=$(echo "$(($major+1)).0.0")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: Increment version minor number
       if: ${{github.event.inputs.version_type=='minor'}}
       run: |
-        NEW_VERSION=$(echo "$major.$(($minor+1)).$patch")
+        NEW_VERSION=$(echo "$major.$(($minor+1)).0")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: Increment version patch number
