@@ -30,10 +30,10 @@ jobs:
     - name: Current version
       run: |
         CURRENT_VERSION=$(git describe --tags --abbrev=0)
-        major=$(echo CURRENT_VERSION | cut -d. -f1)
-        minor=$(echo CURRENT_VERSION | cut -d. -f2)
-        patch=$(echo CURRENT_VERSION | cut -d. -f3)
-        echo "Current version " $major.$minor.$patch
+        major=$(echo $CURRENT_VERSION | cut -d. -f1)
+        minor=$(echo $CURRENT_VERSION | cut -d. -f2)
+        patch=$(echo $CURRENT_VERSION | cut -d. -f3)
+        echo "Current version $major.$minor.$patch"
 
     - name: Increment version by major
       if: contains(github.event.inputs.auto_version, 'major')
