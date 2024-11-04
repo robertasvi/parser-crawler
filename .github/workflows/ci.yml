@@ -62,7 +62,10 @@ jobs:
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: New version
-      run: echo "New version $NEW_VERSION"
+      id: newVersion
+      run: |
+        echo "::set-output name=release_version::${NEW_VERSION}"
+        echo "New version $NEW_VERSION"
 
   build:
     needs:
@@ -78,16 +81,16 @@ jobs:
           cache: maven
     
       - name: Update version in POM
-        run: mvn versions:set -DnewVersion=${{env.NEW_VERSION}}
+        run: mvn versions:set -DnewVersion=${{steps.newVersion.outputs.release_version}}
 
       - name: Create a new tag
         run: |
           git config user.email "robertasvi@users.noreply.github.com"
           git config user.name "robertasvi"
           git add -A
-          git commit -a -m "Version increment ${{env.NEW_VERSION}}"
+          git commit -a -m "Version increment $NEW_VERSION"
           git push origin master
-          git tag ${{env.NEW_VERSION}}
+          git tag $NEW_VERSION
           git push --follow-tags
           git push --tags
 
