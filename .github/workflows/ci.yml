@@ -1,4 +1,5 @@
-name: Build
+name: Build & deploy
+run-name: Deploy to ${{inputs.environment}} by @${{github.actor}}
 
 on:
   workflow_dispatch:
@@ -65,7 +66,7 @@ jobs:
         NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
-    - name: New version $NEW_VERSION
+    - name: New version
       id: newVersion
       run: echo "releaseVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
 
