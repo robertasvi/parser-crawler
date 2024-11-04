@@ -46,9 +46,7 @@ jobs:
         echo "minor=${minor}" >> $GITHUB_ENV
         patch=$(echo $CURRENT_VERSION | cut -d. -f3)
         echo "patch=${patch}" >> $GITHUB_ENV
-        development=$(echo $CURRENT_VERSION | cut -d. -f4)
-        echo "development=${development}" >> $GITHUB_ENV
-        echo "Current version $major.$minor.$patch.$development"
+        echo "Current version $major.$minor.$patch"
 
     - name: Increment major version
       if: ${{github.event.inputs.version_type=='major'&&github.ref_name=='master'&&github.event.inputs.environment=='production'}}
@@ -69,7 +67,7 @@ jobs:
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
     
     - name: Increment development version
-      if: ${{github.event.inputs.version_type=='development'&&github.event.inputs.environment=='development'}}
+      if: ${{github.event.inputs.version_type=='development'&&(github.event.inputs.environment=='development'||github.event.inputs.environment=='systest')}}
       run: |
         NEW_VERSION=$(echo "$major.$minor.$patch.$(date +'%Y%m%d-%H%M%S')")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
