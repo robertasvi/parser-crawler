@@ -50,7 +50,7 @@ jobs:
     - name: Increment version by patch
       if: contains(github.event.inputs.auto_version, 'patch')
       run: |
-        echo ${{env.major}}.${{env.minor}}.${{env.patch}}
+        echo $major.$minor.$patch
         NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
         echo $NEW_VERSION
     
