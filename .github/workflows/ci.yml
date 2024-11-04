@@ -66,7 +66,7 @@ jobs:
     - name: New version
       id: newVersion
       run: |
-        echo "releaseVersion=$release-version" >> $GITHUB_OUTPUT
+        echo "releaseVersion=$NEW_VERSION" >> $GITHUB_OUTPUT
         echo "New version $NEW_VERSION"
 
   build:
