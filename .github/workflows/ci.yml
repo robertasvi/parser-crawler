@@ -27,7 +27,7 @@ on:
 jobs:
   version:
     name: "Increment version by ${{github.event.inputs.release_version}}"
-    if: ${{github.ref_name=='release' && github.event.inputs.environment=='production'}}
+    if: ${{github.ref_name=='master' && github.event.inputs.environment=='production'}}
     runs-on: ubuntu-latest
     outputs:
       NEW_VERSION: ${{steps.newVersion.outputs.releaseVersion}}
