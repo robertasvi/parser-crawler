@@ -12,21 +12,16 @@ on:
           - major
           - minor
           - patch
-env:
-  CURRENT_VERSION:
-  NEW_VERSION:
-  major:
-  minor:
-  patch:
 
 jobs:
-  build:
+  version:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+        
     - name: Set up JDK 11
       uses: actions/setup-java@v3
       with:
@@ -36,41 +31,53 @@ jobs:
 
     - name: Current version
       run: |
-        echo "CURRENT_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-        echo ${{env.CURRENT_VERSION}}
-        echo "major=$(echo ${{env.CURRENT_VERSION}} | cut -d. -f1)" >> $GITHUB_ENV
-        echo "minor=$(echo ${{env.CURRENT_VERSION}} | cut -d. -f2)" >> $GITHUB_ENV
-        echo "patch=$(echo ${{env.CURRENT_VERSION}} | cut -d. -f3)" >> $GITHUB_ENV
+        CURRENT_VERSION=$(git describe --tags --abbrev=0)
+        major=$(echo CURRENT_VERSION | cut -d. -f1)
+        minor=$(echo CURRENT_VERSION | cut -d. -f2)
+        patch=$(echo CURRENT_VERSION | cut -d. -f3)
+        echo "Current version $major.$minor.$patch"
 
     - name: Increment version by major
       if: contains(github.event.inputs.auto_version, 'major')
       run: |
-        echo "NEW_VERSION=$(echo "$((${{env.major}}+1)).${{env.minor}}.${{env.patch}}")" >> $GITHUB_ENV
-        echo ${{env.NEW_VERSION}}
+        NEW_VERSION=$(echo "$(($major+1)).$minor.$patch")
+        echo $NEW_VERSION
 
     - name: Increment version by minor
       if: contains(github.event.inputs.auto_version, 'minor')
       run: |
-        echo "NEW_VERSION=$(echo "${{env.major}}.$((${{env.minor}}+1)).${{env.patch}}")" >> $GITHUB_ENV
-        echo ${{env.NEW_VERSION}}
+        NEW_VERSION=$(echo "$major.$(($minor+1)).$patch")
+        echo $NEW_VERSION
 
     - name: Increment version by patch
       if: contains(github.event.inputs.auto_version, 'patch')
       run: |
-        echo "NEW_VERSION=$(echo "${{env.major}}.${{env.minor}}.$((${{env.patch}}+1))")" >> $GITHUB_ENV
-        echo ${{env.NEW_VERSION}}
-
+        NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
+        echo $NEW_VERSION
+    
     - name: Create new version tag
       run: |
-        mvn versions:set -DnewVersion=${{env.NEW_VERSION}}
+        mvn versions:set -DnewVersion=$NEW_VERSION
         git config user.email "robertasvi@users.noreply.github.com"
         git config user.name "robertasvi"
         git add -A
-        git commit -a -m "Version increment ${{env.NEW_VERSION}}"
+        git commit -a -m "Version increment $NEW_VERSION"
         git push origin master
-        git tag ${{env.NEW_VERSION}}
+        git tag $NEW_VERSION
         git push --follow-tags
         git push --tags
 
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+    
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+    
