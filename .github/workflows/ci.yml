@@ -28,7 +28,6 @@ on:
 jobs:
   version:
     name: "Increment ${{github.event.inputs.version_type}} version"
-    if: ${{github.ref_name=='master' && github.event.inputs.environment=='production'}}
     runs-on: ubuntu-latest
     outputs:
       NEW_VERSION: ${{steps.newVersion.outputs.releaseVersion}}
@@ -49,13 +48,13 @@ jobs:
         echo "Current version $major.$minor.$patch"
 
     - name: Increment version major number
-      if: ${{github.event.inputs.version_type=='major'}}
+      if: ${{github.event.inputs.version_type=='major'&&github.ref_name=='master'&&github.event.inputs.environment=='production'}}
       run: |
         NEW_VERSION=$(echo "$(($major+1)).0.0")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: Increment version minor number
-      if: ${{github.event.inputs.version_type=='minor'}}
+      if: ${{github.event.inputs.version_type=='minor'&&github.ref_name=='master'&&github.event.inputs.environment=='production'}}
       run: |
         NEW_VERSION=$(echo "$major.$(($minor+1)).0")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
