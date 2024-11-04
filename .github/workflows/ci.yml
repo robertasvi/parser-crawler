@@ -43,23 +43,26 @@ jobs:
       run: |
         NEW_VERSION=$(echo "$(($major+1)).$minor.$patch")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
-        echo "New version $NEW_VERSION"
 
     - name: Increment version by minor
       if: contains(github.event.inputs.auto_version, 'minor')
       run: |
         NEW_VERSION=$(echo "$major.$(($minor+1)).$patch")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
-        echo "New version $NEW_VERSION"
 
     - name: Increment version by patch
       if: contains(github.event.inputs.auto_version, 'patch')
       run: |
         NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
-        echo "New version $NEW_VERSION"
+
+    - name: New version
+      run: echo "New version $NEW_VERSION"
     
-    - name: Create new version tag
+    - name: Update version in POM
+      run: mvn versions:set -DnewVersion=$NEW_VERSION
+
+    - name: Create a new tag
       run: |
         mvn versions:set -DnewVersion=$NEW_VERSION
         git config user.email "robertasvi@users.noreply.github.com"
