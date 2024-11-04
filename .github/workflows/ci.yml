@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Build & deploy Java
 
 on:
   workflow_dispatch:
@@ -64,7 +64,7 @@ jobs:
     - name: New version
       id: newVersion
       run: |
-        echo "::set-output name=release_version::${NEW_VERSION}"
+        echo "::set-output name=release_version::$NEW_VERSION"
         echo "New version $NEW_VERSION"
 
   build:
