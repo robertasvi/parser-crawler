@@ -28,7 +28,7 @@ jobs:
   version:
     runs-on: ubuntu-latest
     outputs:
-      release-version: ${{steps.newVersion.outputs.releaseVersion}}
+      NEW_VERSION: ${{steps.newVersion.outputs.releaseVersion}}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -74,7 +74,7 @@ jobs:
       - version
     runs-on: ubuntu-latest
     env:
-      NEW_VERSION: ${{needs.newVersion.outputs.release-version}}
+      NEW_VERSION: ${{needs.newVersion.outputs.NEW_VERSION}}
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
