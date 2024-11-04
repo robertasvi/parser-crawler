@@ -31,28 +31,28 @@ jobs:
     - name: Current version
       run: |
         echo "CURRENT_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
-        echo $CURRENT_VERSION
-        echo "major=$(echo $CURRENT_VERSION | cut -d. -f1)" >> $GITHUB_ENV
-        echo "minor=$(echo $CURRENT_VERSION | cut -d. -f2)" >> $GITHUB_ENV
-        echo "patch=$(echo $CURRENT_VERSION | cut -d. -f3)" >> $GITHUB_ENV
+        echo ${{env.CURRENT_VERSION}}
+        echo "major=$(echo ${{env.CURRENT_VERSION}} | cut -d. -f1)" >> $GITHUB_ENV
+        echo "minor=$(echo ${{env.CURRENT_VERSION}} | cut -d. -f2)" >> $GITHUB_ENV
+        echo "patch=$(echo ${{env.CURRENT_VERSION}} | cut -d. -f3)" >> $GITHUB_ENV
 
     - name: Increment version by major
       if: contains(github.event.inputs.auto_version, 'major')
       run: |
-        echo "NEW_VERSION=$(echo "$(($major+1)).$minor.$patch")" >> $GITHUB_ENV
-        echo $NEW_VERSION
+        echo "NEW_VERSION=$(echo "$((${{env.major}}+1)).${{env.minor}}.${{env.patch}}")" >> $GITHUB_ENV
+        echo ${{env.NEW_VERSION}}
 
     - name: Increment version by minor
       if: contains(github.event.inputs.auto_version, 'minor')
       run: |
-        echo "NEW_VERSION=$(echo "$major.$(($minor+1)).$patch")" >> $GITHUB_ENV
-        echo $NEW_VERSION
+        echo "NEW_VERSION=$(echo "${{env.major}}.$((${{env.minor}}+1)).${{env.patch}}")" >> $GITHUB_ENV
+        echo ${{env.NEW_VERSION}}
 
     - name: Increment version by patch
       if: contains(github.event.inputs.auto_version, 'patch')
       run: |
-        echo "NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")" >> $GITHUB_ENV
-        echo $NEW_VERSION
+        echo "NEW_VERSION=$(echo "${{env.major}}.${{env.minor}}.$((${{env.patch}}+1))")" >> $GITHUB_ENV
+        echo ${{env.NEW_VERSION}}
 
     - name: Create new version tag
       run: |
