@@ -1,4 +1,4 @@
-name: Build & deploy
+name: Build, test & deploy
 run-name: ${{github.event_name}} - ${{inputs.environment}} - ${{inputs.version_type}} by @${{github.actor}}
 
 on:
