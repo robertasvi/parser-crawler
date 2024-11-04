@@ -69,7 +69,7 @@ jobs:
     - name: Patch version
       if: contains(github.event.inputs.auto_version, 'patch')
       run: |
-        git describe --tags --abbrev=0
+        git describe --abbrev=0
         VERSION=$(git describe --tags --abbrev=0)
         major=$(echo $VERSION | cut -d. -f1)
         minor=$(echo $VERSION | cut -d. -f2)
