@@ -30,39 +30,39 @@ jobs:
 
     - name: Current version
       run: |
-        export CURRENT_VERSION=$(git describe --tags --abbrev=0)
+        echo "CURRENT_VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
         echo $CURRENT_VERSION
-        export major=$(echo $CURRENT_VERSION | cut -d. -f1)
-        export minor=$(echo $CURRENT_VERSION | cut -d. -f2)
-        export patch=$(echo $CURRENT_VERSION | cut -d. -f3)
+        echo "major=$(echo $CURRENT_VERSION | cut -d. -f1)" >> $GITHUB_ENV
+        echo "minor=$(echo $CURRENT_VERSION | cut -d. -f2)" >> $GITHUB_ENV
+        echo "patch=$(echo $CURRENT_VERSION | cut -d. -f3)" >> $GITHUB_ENV
 
     - name: Increment version by major
       if: contains(github.event.inputs.auto_version, 'major')
       run: |
-        export NEW_VERSION=$(echo "$(($major+1)).$minor.$patch")
+        echo "NEW_VERSION=$(echo "$(($major+1)).$minor.$patch")" >> $GITHUB_ENV
         echo $NEW_VERSION
 
     - name: Increment version by minor
       if: contains(github.event.inputs.auto_version, 'minor')
       run: |
-        export NEW_VERSION=$(echo "$major.$(($minor+1)).$patch")
+        echo "NEW_VERSION=$(echo "$major.$(($minor+1)).$patch")" >> $GITHUB_ENV
         echo $NEW_VERSION
 
     - name: Increment version by patch
       if: contains(github.event.inputs.auto_version, 'patch')
       run: |
-        export NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
+        echo "NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")" >> $GITHUB_ENV
         echo $NEW_VERSION
 
     - name: Create new version tag
       run: |
-        mvn versions:set -DnewVersion=$NEW_VERSION
+        mvn versions:set -DnewVersion=${{env.NEW_VERSION}}
         git config user.email "robertasvi@users.noreply.github.com"
         git config user.name "robertasvi"
         git add -A
-        git commit -a -m "Version increment $NEW_VERSION"
+        git commit -a -m "Version increment ${{env.NEW_VERSION}}"
         git push origin master
-        git tag $NEW_VERSION
+        git tag ${{env.NEW_VERSION}}
         git push --follow-tags
         git push --tags
 
