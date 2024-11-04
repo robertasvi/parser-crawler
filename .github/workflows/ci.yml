@@ -3,10 +3,21 @@ name: Java CI with Maven
 on:
   workflow_dispatch:
     inputs:
-      auto_version:
+      environment:
+        required: true
+        default: 'development'
+        description: Choose target environment
+        type: choice
+        options:
+          - development
+          - systest
+          - stage
+          - production
+
+      release_version:
         required: true
         default: 'patch'
-        description: Choose auto-versioning type
+        description: Choose release version
         type: choice
         options:
           - major
@@ -39,19 +50,19 @@ jobs:
         echo "Current version $major.$minor.$patch"
 
     - name: Increment version by major
-      if: contains(github.event.inputs.auto_version, 'major')
+      if: contains(github.event.inputs.release_version, 'major')
       run: |
         NEW_VERSION=$(echo "$(($major+1)).$minor.$patch")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: Increment version by minor
-      if: contains(github.event.inputs.auto_version, 'minor')
+      if: contains(github.event.inputs.release_version, 'minor')
       run: |
         NEW_VERSION=$(echo "$major.$(($minor+1)).$patch")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: Increment version by patch
-      if: contains(github.event.inputs.auto_version, 'patch')
+      if: contains(github.event.inputs.release_version, 'patch')
       run: |
         NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
