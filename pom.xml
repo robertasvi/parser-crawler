@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.crawler</groupId>
 	<artifactId>parser</artifactId>
-	<version>1.8.1.20241104-190141</version>
+	<version>1.8.1.20241104-191706</version>
 	<name>parser</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
