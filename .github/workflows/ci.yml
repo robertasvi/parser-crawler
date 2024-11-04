@@ -28,63 +28,41 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Major version
+    - name: Current version
+      run: |
+        export CURRENT_VERSION=$(git describe --tags --abbrev=0)
+        echo $CURRENT_VERSION
+        export major=$(echo $CURRENT_VERSION | cut -d. -f1)
+        export minor=$(echo $CURRENT_VERSION | cut -d. -f2)
+        export patch=$(echo $CURRENT_VERSION | cut -d. -f3)
+
+    - name: Increment version by major
       if: contains(github.event.inputs.auto_version, 'major')
       run: |
-        # VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-        VERSION=$(git describe --tags --abbrev=0)
-        major=$(echo $VERSION | cut -d. -f1)
-        minor=$(echo $VERSION | cut -d. -f2)
-        patch=$(echo $VERSION | cut -d. -f3)
-        major=$(($major+1))
-        RELEASE=$(echo "$major.$minor.$patch")
-        mvn versions:set -DnewVersion=$RELEASE
-        git config user.email "robertasvi@users.noreply.github.com"
-        git config user.name "robertasvi"
-        git add -A
-        git commit -a -m "Version increment $RELEASE"
-        git push origin master
-        git tag $RELEASE
-        git push --follow-tags
-        git push --tags
+        export NEW_VERSION=$(echo "$(($major+1)).$minor.$patch")
+        echo $NEW_VERSION
 
-    - name: Minor version
+    - name: Increment version by minor
       if: contains(github.event.inputs.auto_version, 'minor')
       run: |
-        # VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-        VERSION=$(git describe --tags --abbrev=0)
-        major=$(echo $VERSION | cut -d. -f1)
-        minor=$(echo $VERSION | cut -d. -f2)
-        patch=$(echo $VERSION | cut -d. -f3)
-        minor=$(($minor+1))
-        RELEASE=$(echo "$major.$minor.$patch")
-        mvn versions:set -DnewVersion=$RELEASE
-        git config user.email "robertasvi@users.noreply.github.com"
-        git config user.name "robertasvi"
-        git add -A
-        git commit -a -m "Version increment $RELEASE"
-        git push origin master
-        git tag $RELEASE
-        git push --follow-tags
-        git push --tags
+        export NEW_VERSION=$(echo "$major.$(($minor+1)).$patch")
+        echo $NEW_VERSION
 
-    - name: Patch version
+    - name: Increment version by patch
       if: contains(github.event.inputs.auto_version, 'patch')
       run: |
-        git describe --tags --abbrev=0
-        VERSION=$(git describe --tags --abbrev=0)
-        major=$(echo $VERSION | cut -d. -f1)
-        minor=$(echo $VERSION | cut -d. -f2)
-        patch=$(echo $VERSION | cut -d. -f3)
-        patch=$(($patch+1))
-        RELEASE=$(echo "$major.$minor.$patch")
-        mvn versions:set -DnewVersion=$RELEASE
+        export NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
+        echo $NEW_VERSION
+
+    - name: Create new version tag
+      run: |
+        mvn versions:set -DnewVersion=$NEW_VERSION
         git config user.email "robertasvi@users.noreply.github.com"
         git config user.name "robertasvi"
         git add -A
-        git commit -a -m "Version increment $RELEASE"
+        git commit -a -m "Version increment $NEW_VERSION"
         git push origin master
-        git tag $RELEASE
+        git tag $NEW_VERSION
         git push --follow-tags
         git push --tags
 
