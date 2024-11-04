@@ -1,5 +1,5 @@
 name: Build & deploy
-run-name: Deploy to ${{inputs.environment}} by @${{github.actor}}
+run-name: Deploy to ${{inputs.environment}} ${{inputs.release_version}} by @${{github.actor}}
 
 on:
   workflow_dispatch:
