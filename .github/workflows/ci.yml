@@ -1,5 +1,5 @@
 name: Build, test & deploy
-run-name: ${{github.event_name}} - ${{github.event.inputs.environment||'development'}} - ${{github.actor}}
+run-name: ${{github.event_name}} ${{github.event.pull_request.base}} - ${{github.event.inputs.environment||'development'}} - ${{github.actor}}
 
 env:
   target_environment: ${{github.event.inputs.environment||'development'}}
