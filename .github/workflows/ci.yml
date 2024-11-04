@@ -85,19 +85,19 @@ jobs:
           cache: maven
 
       - name: Read the build job output
-        run: echo "${{steps.newVersion.outputs.releaseVersion}}"
+        run: echo "$NEW_VERSION"
     
       - name: Update version in POM
-        run: mvn versions:set -DnewVersion=${{steps.newVersion.outputs.releaseVersion}}
+        run: mvn versions:set -DnewVersion=$NEW_VERSION
 
       - name: Create a new tag
         run: |
           git config user.email "robertasvi@users.noreply.github.com"
           git config user.name "robertasvi"
           git add -A
-          git commit -a -m "Version increment ${{steps.newVersion.outputs.releaseVersion}}"
+          git commit -a -m "Version increment $NEW_VERSION"
           git push origin master
-          git tag ${{steps.newVersion.outputs.releaseVersion}}
+          git tag $NEW_VERSION
           git push --follow-tags
           git push --tags
 
