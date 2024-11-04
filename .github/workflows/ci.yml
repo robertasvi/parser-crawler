@@ -89,7 +89,7 @@ jobs:
       - name: Update version in POM
         run: mvn versions:set -DnewVersion=$NEW_VERSION
 
-      - name: Create a new tag
+      - name: Create a new tag ${{needs.version.outputs.NEW_VERSION}}
         run: |
           git config user.email "robertasvi@users.noreply.github.com"
           git config user.name "robertasvi"
