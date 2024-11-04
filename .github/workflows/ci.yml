@@ -2,6 +2,9 @@ name: Build & deploy
 run-name: Deploy to ${{inputs.environment}} - ${{inputs.version_type}} by @${{github.actor}}
 
 on:
+  pull_request:
+    branches: [development, release, master]
+
   workflow_dispatch:
     inputs:
       environment:
@@ -67,7 +70,7 @@ jobs:
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
     
     - name: Increment development version
-      if: ${{github.event.inputs.version_type=='development'&&(github.event.inputs.environment=='development'||github.event.inputs.environment=='systest')}}
+      if: ${{github.event_name=='pull_request'||github.event.inputs.version_type=='development'&&(github.event.inputs.environment=='development'||github.event.inputs.environment=='systest')}}
       run: |
         NEW_VERSION=$(echo "$major.$minor.$patch.$(date +'%Y%m%d-%H%M%S')")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
