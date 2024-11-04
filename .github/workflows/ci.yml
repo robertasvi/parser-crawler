@@ -29,7 +29,8 @@ jobs:
     - name: Major version
       if: contains(github.event.inputs.auto_version, 'major')
       run: |
-        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        # VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        VERSION=$(git describe --tags --abbrev=0)
         major=$(echo $VERSION | cut -d. -f1)
         minor=$(echo $VERSION | cut -d. -f2)
         patch=$(echo $VERSION | cut -d. -f3)
@@ -48,7 +49,8 @@ jobs:
     - name: Minor version
       if: contains(github.event.inputs.auto_version, 'minor')
       run: |
-        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        # VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        VERSION=$(git describe --tags --abbrev=0)
         major=$(echo $VERSION | cut -d. -f1)
         minor=$(echo $VERSION | cut -d. -f2)
         patch=$(echo $VERSION | cut -d. -f3)
@@ -67,7 +69,8 @@ jobs:
     - name: Patch version
       if: contains(github.event.inputs.auto_version, 'patch')
       run: |
-        VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        # VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        VERSION=$(git describe --tags --abbrev=0)
         major=$(echo $VERSION | cut -d. -f1)
         minor=$(echo $VERSION | cut -d. -f2)
         patch=$(echo $VERSION | cut -d. -f3)
