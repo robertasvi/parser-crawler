@@ -4,6 +4,8 @@ run-name: ${{github.event_name}} - ${{inputs.environment}} - ${{inputs.version_t
 on:
   pull_request:
     branches: [development, release, master]
+  push:
+    branches: ['AWP-**']
 
   workflow_dispatch:
     inputs:
