@@ -27,7 +27,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Current version
+    - name: Parse current version
       run: |
         CURRENT_VERSION=$(git describe --tags --abbrev=0)
         major=$(echo $CURRENT_VERSION | cut -d. -f1)
