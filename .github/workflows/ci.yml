@@ -1,5 +1,5 @@
 name: Build, test & deploy
-run-name: ${{github.event_name}} - ${{github.ref_name}} - ${{github.event.inputs.environment||'development'}} - ${{inputs.version_type||'development'}} - ${{github.actor}}
+run-name: ${{github.event_name}} - ${{github.event.inputs.environment||'development'}} - ${{github.actor}}
 
 env:
   target_environment: ${{github.event.inputs.environment||'development'}}
@@ -38,7 +38,7 @@ on:
 
 jobs:
   version:
-    name: "Increment ${{inputs.version_type}} version"
+    name: "Increment ${{inputs.version_type||'development'}} version"
     runs-on: ubuntu-latest
     outputs:
       NEW_VERSION: ${{steps.newVersion.outputs.releaseVersion}}
@@ -59,25 +59,25 @@ jobs:
         echo "Current version $major.$minor.$patch"
 
     - name: Increment major version
-      if: ${{inputs.version_type=='major'&&github.ref_name=='master'&&env.target_environment=='production'}}
+      if: ${{env.version_type=='major'&&github.ref_name=='master'&&env.target_environment=='production'}}
       run: |
         NEW_VERSION=$(echo "$(($major+1)).0.0")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: Increment minor version
-      if: ${{inputs.version_type=='minor'&&github.ref_name=='master'&&env.target_environment=='production'}}
+      if: ${{env.version_type=='minor'&&github.ref_name=='master'&&env.target_environment=='production'}}
       run: |
         NEW_VERSION=$(echo "$major.$(($minor+1)).0")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
 
     - name: Increment patch version
-      if: ${{inputs.version_type=='patch'&&github.ref_name=='master'&&env.target_environment=='production'}}
+      if: ${{env.version_type=='patch'&&github.ref_name=='master'&&env.target_environment=='production'}}
       run: |
         NEW_VERSION=$(echo "$major.$minor.$(($patch+1))")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
     
     - name: Increment development version
-      if: ${{(github.event_name=='pull_request'||github.event_name=='push'||github.event_name=='workflow_dispatch')||inputs.version_type=='development'&&(env.target_environment=='development'||env.target_environment=='systest')}}
+      if: ${{(github.event_name=='pull_request'||github.event_name=='push'||github.event_name=='workflow_dispatch')||env.version_type=='development'&&(env.target_environment=='development'||env.target_environment=='systest')}}
       run: |
         NEW_VERSION=$(echo "$major.$minor.$patch.$(date +'%Y%m%d-%H%M%S')")
         echo "NEW_VERSION=${NEW_VERSION}" >> $GITHUB_ENV
